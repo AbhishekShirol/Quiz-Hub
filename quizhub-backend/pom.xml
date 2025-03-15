@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.quizhub</groupId>
-	<artifactId>quizhub</artifactId>
+	<artifactId>quizhub-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>QuizHub</name>
 	<description>Quiz Management System</description>
