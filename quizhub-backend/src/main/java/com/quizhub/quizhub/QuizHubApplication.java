@@ -8,15 +8,15 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class QuizHubApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(QuizHubApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(QuizHubApplication.class, args);
+    }
 
-	@Bean
-	public GroupedOpenApi api() {
-		return GroupedOpenApi.builder()
-				.group("QuizHub API")
-				.pathsToMatch("/**")
-				.build();
-	}
+    @Bean
+    public GroupedOpenApi api() {
+        return GroupedOpenApi.builder()
+                .group("QuizHub API")
+                .pathsToMatch("/**")
+                .build();
+    }
 }
