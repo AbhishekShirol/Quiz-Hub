@@ -2,6 +2,8 @@ package com.quizhub.quizhub.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.quizhub.quizhub.model.QuestionType;
+
 
 @Entity
 @Table(name = "questions")

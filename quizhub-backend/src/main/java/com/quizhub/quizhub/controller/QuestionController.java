@@ -23,6 +23,7 @@ public class QuestionController {
     @Autowired
     private UserService userService;
 
+    //adding question
     @PostMapping("/add")
     public ResponseEntity<?> addQuestion(@RequestBody Question question) {
         try {
@@ -31,7 +32,7 @@ public class QuestionController {
             String userName = authentication.getName();
 
             // Retrieve the user based on the username
-            User user = userService.findByUsername(userName);
+            User user = userService.findByUserName(userName);
 
             // Set the user to the question (use user object directly)
             question.setUser(user);  // user ID will be fetched from user object

@@ -9,7 +9,7 @@ function QuizHub() {
         <div className="container mx-auto px-5 max-w-7xl">
           <nav className="flex flex-col md:flex-row justify-between items-center py-4 gap-4 md:gap-0">
             {/* Logo Positioned First */}
-            <a href="#" className="flex items-center gap-2 font-bold text-xl text-indigo-600">
+            <a href="/" className="flex items-center gap-2 font-bold text-xl text-indigo-600">
               <div className="bg-indigo-600 text-white w-8 h-8 rounded-md flex items-center justify-center font-bold">Q</div>
               <span>QuizHub</span>
             </a>
@@ -23,11 +23,9 @@ function QuizHub() {
 
             {/* Login & Signup Buttons */}
             <div className="flex gap-4 items-center w-full md:w-auto justify-center">
-              <button className="px-5 py-2 rounded-md text-lg font-medium border border-slate-700 text-slate-200 hover:border-indigo-600 hover:text-indigo-600 transition-all">
+              <button className="px-5 py-2 rounded-md text-lg font-medium bg-indigo-600 hover:bg-indigo-700 text-white transition-colors" 
+              onClick={() => (window.location.href = "/login")} >
                 Log in
-              </button>
-              <button className="px-5 py-2 rounded-md text-lg font-medium bg-indigo-600 hover:bg-indigo-700 text-white transition-colors">
-                Sign up
               </button>
             </div>
           </nav>
