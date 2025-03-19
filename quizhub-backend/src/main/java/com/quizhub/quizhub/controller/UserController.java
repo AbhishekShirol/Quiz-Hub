@@ -2,7 +2,10 @@ package com.quizhub.quizhub.controller;
 
 import com.quizhub.quizhub.model.User;
 import com.quizhub.quizhub.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,44 +14,43 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+    @Autowired UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
-    //Create User
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return ResponseEntity.status(201).body(createdUser); // HTTP 201 CREATED
-    }
 
-    //Get All Users
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users); // HTTP 200 OK
-    }
+//    //Get All Users
+//    @GetMapping
+//    public ResponseEntity<List<User>> getAllUsers() {
+//        List<User> users = userService.getAllUsers();
+//        return ResponseEntity.ok(users); // HTTP 200 OK
+//    }
 
-    //Get User by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        return ResponseEntity.ok(user); // HTTP 200 OK
-    }
+//    //Get User by ID
+//    @GetMapping("/{id}")
+//    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+//        User user = userService.getUserById(id);
+//        return ResponseEntity.ok(user); // HTTP 200 OK
+//    }
 
     //Update User
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        User user = userService.updateUser(id, updatedUser);
-        return ResponseEntity.ok(user); // HTTP 200 OK
+    @PutMapping()
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        // Retrieve the authenticated username
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        // Call the service layer to update the user
+        User updatedUser = userService.updateUser(userName, user);
+
+        return ResponseEntity.ok(updatedUser); // HTTP 200 OK
     }
 
     //Delete User
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    @DeleteMapping()
+    public ResponseEntity<Void> deleteUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        userService.deleteUser(userName);
         return ResponseEntity.noContent().build(); // HTTP 204 NO CONTENT
     }
 }

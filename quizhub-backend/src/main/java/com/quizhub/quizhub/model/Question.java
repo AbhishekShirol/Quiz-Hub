@@ -40,4 +40,8 @@ public class Question {
     private String topic;
 
     private Long quizId; // Nullable if not part of a quiz
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
