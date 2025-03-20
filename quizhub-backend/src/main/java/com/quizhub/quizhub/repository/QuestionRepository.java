@@ -1,13 +1,21 @@
 package com.quizhub.quizhub.repository;
 
 import com.quizhub.quizhub.model.Question;
+import com.quizhub.quizhub.model.Topic;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 
-@Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-    List<Question> findByTopic(String topic);
 
-    List<Question> findByUserId(Long userId);
+    @Query("SELECT DISTINCT q.topic FROM Question q")
+    List<Topic> findDistinctTopics();
+
+    List<Question> findByTopic(Topic topic, Pageable pageable);
+
+    @Query("SELECT COUNT(q) FROM Question q WHERE q.topic.id = :topicId")
+    long countByTopicId(@Param("topicId") Long topicId);
 }
