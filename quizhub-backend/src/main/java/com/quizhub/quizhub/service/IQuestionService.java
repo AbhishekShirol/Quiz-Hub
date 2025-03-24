@@ -13,4 +13,6 @@ public interface IQuestionService {
     void deleteQuestion(Long id);
     List<Question> getQuestionsForTopic(Long topicId, int numOfQuestions);
     Question assignQuestionToQuiz(Long questionId, Long quizId);
+
+    List<Question> getQuestionsForUser(String userName);
 }

@@ -24,6 +24,9 @@ public class UserService {
 
     // Find user by username
     public User findByUserName(String username) {
+        if ("anonymousUser".equals(username)) {
+            throw new RuntimeException("User not authenticated.");
+        }
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }

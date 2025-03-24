@@ -27,4 +27,9 @@ public class Quiz {
             inverseJoinColumns = @JoinColumn(name = "question_id")
     )
     private List<Question> questions;
+
+
+    @Column(nullable = false)
+    private Long createdBy; // Store user ID
+
 }

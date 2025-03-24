@@ -1,5 +1,6 @@
 package com.quizhub.quizhub.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import com.quizhub.quizhub.model.QuestionType;
@@ -88,7 +89,8 @@ public class Question {
     private DifficultyLevel difficulty;
 
     @ManyToOne
-    @JoinColumn(name = "topic_id", nullable = false)
+    @JoinColumn(name = "topic_id", nullable = false) // ✅ Ensure single foreign key column
+    @JsonBackReference  // Prevents infinite recursion
     private Topic topic; // Foreign key to Topic entity
 
     @ManyToMany(mappedBy = "questions")
@@ -98,4 +100,3 @@ public class Question {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy; // Tracks which educator added the question
 }
-

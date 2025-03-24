@@ -18,4 +18,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query("SELECT COUNT(q) FROM Question q WHERE q.topic.id = :topicId")
     long countByTopicId(@Param("topicId") Long topicId);
+
+    List<Question> findByCreatedBy_Id(Long userId);
+
 }

@@ -138,6 +138,7 @@ import com.quizhub.quizhub.repository.QuizRepository;
 import com.quizhub.quizhub.repository.TopicRepository;
 import com.quizhub.quizhub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -147,9 +148,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuestionService implements IQuestionService {
 
-    private final QuestionRepository questionRepository;
-    private final QuizRepository quizRepository;
-    private final TopicRepository topicRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    @Autowired
+    private QuizRepository quizRepository;
+
+    @Autowired
+    private TopicRepository topicRepository;
+
+    @Autowired
     private final UserRepository userRepository;
 
     @Override
@@ -215,4 +223,20 @@ public class QuestionService implements IQuestionService {
 
         return question;
     }
+
+    //the questions accessed by the users who created
+    @Override
+    public List<Question> getQuestionsForUser(String username) {
+        try {
+            // Fetch the user based on the username
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Fetch questions associated with the user's ID
+            return questionRepository.findByCreatedBy_Id(user.getId());
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching questions for user: " + username, e);
+        }
+    }
+
 }
