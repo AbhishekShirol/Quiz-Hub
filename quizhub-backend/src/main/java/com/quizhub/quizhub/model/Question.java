@@ -89,9 +89,8 @@ public class Question {
     private DifficultyLevel difficulty;
 
     @ManyToOne
-    @JoinColumn(name = "topic_id", nullable = false) // ✅ Ensure single foreign key column
-    @JsonBackReference  // Prevents infinite recursion
-    private Topic topic; // Foreign key to Topic entity
+    @JoinColumn(name = "topic_id", nullable = false)
+    private Topic topic;
 
     @ManyToMany(mappedBy = "questions")
     private List<Quiz> quizzes; // Many-to-Many relationship with quizzes

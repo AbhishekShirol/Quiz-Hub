@@ -3,6 +3,7 @@ package com.quizhub.quizhub.controller;
 
 import com.quizhub.quizhub.Utilis.JwtUtil;
 import com.quizhub.quizhub.model.User;
+import com.quizhub.quizhub.repository.UserRepository;
 import com.quizhub.quizhub.service.UserDetailsServiceImpl;
 import com.quizhub.quizhub.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value="/public")
@@ -39,6 +42,9 @@ public class PublicController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private UserRepository userRepository;
+
     //Create User
     @PostMapping("/create-user")
     public ResponseEntity<User> createUser(@RequestBody User user) {
@@ -53,17 +59,38 @@ public class PublicController {
     }
 
 
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody User user){
+//        try{
+//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+//            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+//            String jwt = jwtUtil.generateToken(userDetails.getUsername());
+//            return new ResponseEntity<>(jwt, HttpStatus.OK);
+//        }catch (Exception e){
+//            log.error("Exception occured while creating AuthenticationToken",e);
+//            return new ResponseEntity<>("Incorrect Username or Password",HttpStatus.BAD_REQUEST);
+//
+//        }
+//    }
+
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user){
-        try{
+    public ResponseEntity<?> login(@RequestBody User user){
+        try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
             UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
             String jwt = jwtUtil.generateToken(userDetails.getUsername());
-            return new ResponseEntity<>(jwt, HttpStatus.OK);
-        }catch (Exception e){
-            log.error("Exception occured while creating AuthenticationToken",e);
-            return new ResponseEntity<>("Incorrect Username or Password",HttpStatus.BAD_REQUEST);
-
+            // Here, you would also retrieve the user id, e.g., from your User repository.
+            Long userId = userRepository.findByUsername(user.getUsername()).get().getId();
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("token", jwt);
+            responseBody.put("userId", userId);
+            responseBody.put("username", user.getUsername());
+            return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        } catch (Exception e){
+            log.error("Exception occurred while creating AuthenticationToken", e);
+            return new ResponseEntity<>("Incorrect Username or Password", HttpStatus.BAD_REQUEST);
         }
     }
+
 }

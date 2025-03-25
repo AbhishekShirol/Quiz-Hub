@@ -16,18 +16,18 @@ public class TopicController {
         this.topicService = topicService;
     }
 
-    @PostMapping
+    @PostMapping("create-topic")
     public ResponseEntity<Topic> createTopic(@RequestBody Topic topic) {
         Topic savedTopic = topicService.createTopic(topic);
         return ResponseEntity.ok(savedTopic);
     }
 
-    @GetMapping
+    @GetMapping("getall-topics")
     public ResponseEntity<List<Topic>> getAllTopics() {
         return ResponseEntity.ok(topicService.getAllTopics());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("gettopic/{id}")
     public ResponseEntity<Topic> getTopicById(@PathVariable Long id) {
         return topicService.getTopicById(id)
                 .map(ResponseEntity::ok)

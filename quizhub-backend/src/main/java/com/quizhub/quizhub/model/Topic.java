@@ -1,6 +1,7 @@
 package com.quizhub.quizhub.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,7 +23,7 @@ public class Topic {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL)
-    @JsonManagedReference  // Handles bidirectional serialization
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Question> questions;
 }

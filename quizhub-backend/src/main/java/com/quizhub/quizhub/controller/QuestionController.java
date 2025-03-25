@@ -1,5 +1,4 @@
 //package com.quizhub.quizhub.controller;
-//
 //import com.quizhub.quizhub.model.Question;
 //import com.quizhub.quizhub.model.User;
 //import com.quizhub.quizhub.service.QuestionService;
@@ -341,6 +340,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -453,4 +453,22 @@ public class QuestionController {
                     .body("Error deleting question: " + e.getMessage());
         }
     }
+
+
+    @GetMapping("/get-question/{id}")
+    public ResponseEntity<?> getQuestionById(@PathVariable Long id) {
+        try {
+            Optional<Question> question = questionService.getQuestionById(id);
+            if (question.isPresent()) {
+                return ResponseEntity.ok(question.get());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Question with ID " + id + " not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error fetching question: " + e.getMessage());
+        }
+    }
+
 }
