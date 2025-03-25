@@ -7,6 +7,7 @@ import Student from './pages/Student/Student';
 // import EducatorDashboard from './pages/Educator/All';
 import EducatorDashboard from './pages/Educator/EducatorDashboard';
 import Question from './pages/Educator/Questions'
+import AddQuestion from './pages/Educator/AddQuestion';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       {/* <Route path="/educator-dashboard" element={<EducatorDashboard/>}/> */}
       <Route path="/educator-dashboard" element={<EducatorDashboard/>}/>
       <Route path="/my-questions" element={<Question/>} />
+      <Route path="/add-question" element={<AddQuestion/>} />
     </Routes>
   );
 }

@@ -18,8 +18,10 @@ function EducatorDashboard() {
 
   const handleLogout = () => {
     // Remove JWT token and username from localStorage
-    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('token');
     localStorage.removeItem('username');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('isAuthenticated');
     navigate('/login');
   };
 
