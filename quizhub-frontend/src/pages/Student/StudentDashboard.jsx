@@ -31,35 +31,43 @@ function StudentDashboard() {
       {/* Navbar */}
       <header className="bg-slate-800 border-b border-slate-700">
         <div className="container mx-auto px-5 max-w-7xl">
-          <nav className="flex flex-col md:flex-row justify-between items-center py-4 gap-4 md:gap-0">
-            {/* Logo */}
-            <a href="/dashboard" className="flex items-center gap-2 font-bold text-xl text-indigo-600">
-              <div className="bg-indigo-600 text-white w-8 h-8 rounded-md flex items-center justify-center font-bold">Q</div>
-              <span>QuizHub</span>
+        <nav className="flex flex-col md:flex-row justify-between items-center py-4 gap-4 md:gap-0">
+          {/* Logo */}
+          <a href="/dashboard" className="flex items-center gap-2 font-bold text-xl text-indigo-600">
+            <div className="bg-indigo-600 text-white w-8 h-8 rounded-md flex items-center justify-center font-bold">Q</div>
+            <span>QuizHub</span>
+          </a>
+          
+          {/* Navigation Links */}
+          <div className="flex gap-6 w-full md:w-auto justify-center flex-wrap">
+            <a href="/create-filtered-quiz" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
+              Create Filtered Quiz
             </a>
-            {/* Navigation Links */}
-            <div className="flex gap-6 w-full md:w-auto justify-center flex-wrap">
-              <a href="/filtered-quiz" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
-                Filtered Quiz
-              </a>
-              <a href="/private-quiz" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
-                Private Quiz
-              </a>
-              <a href="/public-quiz" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
-                Public Quiz
-              </a>
-            </div>
-            {/* Logout and Welcome */}
-            <div className="flex gap-4 items-center w-full md:w-auto justify-center">
-              <span className="text-slate-300 text-lg">Welcome, {username}!</span>
-              <button
-                onClick={handleLogout}
-                className="bg-indigo-600 px-4 py-2 rounded text-white hover:bg-indigo-700 transition-colors"
-              >
-                Logout
+
+            {/* Take Quiz Dropdown */}
+            <div className="relative group">
+              <button className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
+                Take Quiz ▾
               </button>
+              <div className="absolute left-0 mt-2 w-48 bg-indigo-600 text-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                <a href="/filtered-quiz" className="block px-4 py-2 hover:bg-indigo-500 transition-colors">Filtered Quiz</a>
+                <a href="/public-quiz" className="block px-4 py-2 hover:bg-indigo-500 transition-colors">Public Quiz</a>
+                <a href="/private-quiz" className="block px-4 py-2 hover:bg-indigo-500 transition-colors">Private Quiz</a>
+              </div>
             </div>
-          </nav>
+          </div>
+
+          {/* Logout and Welcome */}
+          <div className="flex gap-4 items-center w-full md:w-auto justify-center">
+            <span className="text-slate-300 text-lg">Welcome, {username}!</span>
+            <button
+              onClick={handleLogout}
+              className="bg-indigo-600 px-4 py-2 rounded text-white hover:bg-indigo-700 transition-colors"
+            >
+              Logout
+            </button>
+          </div>
+        </nav>
         </div>
       </header>
 

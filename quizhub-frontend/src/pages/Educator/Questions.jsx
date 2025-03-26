@@ -72,8 +72,16 @@ function Question() {
   const handleDelete = (id) => {
     if (window.confirm('Do you want to delete this question?')) {
       axios.delete(`http://localhost:8080/questions/delete-question/${id}`)
-        .then(() => setQuestions(questions.filter(q => q.id !== id)))
-        .catch(error => console.error('Error deleting question:', error));
+        .then(() => {
+          // Remove the question from the state
+          setQuestions(questions.filter(q => q.id !== id));
+          // Show success message
+          alert('Question deleted successfully');
+        })
+        .catch(error => {
+          console.error('Error deleting question:', error);
+          alert('Error deleting question: ' + (error.response?.data || error.message));
+        });
     }
   };
 
@@ -107,6 +115,27 @@ function Question() {
       ...prev,
       options: [...prev.options, '']
     }));
+  };
+
+  // Remove the last option (only if there's more than one option)
+  const handleRemoveLastOption = () => {
+    setSelectedQuestion(prev => {
+      // Only remove if there's more than one option
+      if (prev.options.length > 1) {
+        const updatedOptions = [...prev.options];
+        const removedOption = updatedOptions.pop(); // Remove the last option
+        
+        // If the removed option was marked as correct, remove it from correctOptions too
+        const updatedCorrectOptions = prev.correctOptions.filter(opt => opt !== removedOption);
+        
+        return {
+          ...prev,
+          options: updatedOptions,
+          correctOptions: updatedCorrectOptions
+        };
+      }
+      return prev; // Don't change if only one option remains
+    });
   };
 
   // Toggle checkbox for correct options.
@@ -333,7 +362,16 @@ function Question() {
                   <span>Correct</span>
                 </div>
               ))}
-              <button onClick={handleAddOption} className="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600">Add Option</button>
+              <div className="flex gap-2">
+                <button onClick={handleAddOption} className="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600">Add Option</button>
+                <button 
+                  onClick={handleRemoveLastOption} 
+                  className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
+                  disabled={selectedQuestion.options.length <= 1}
+                >
+                  Remove Last Option
+                </button>
+              </div>
             </div>
 
             {/* Display non-editable createdBy */}
