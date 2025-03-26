@@ -9,7 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
-    List<Quiz> findByCreatedBy(Long createdBy);
-    Optional<Quiz> findByIdAndCreatedBy(Long id, Long createdBy);
+    // Using generatedBy.id to fetch quizzes for a specific user
+    List<Quiz> findByGeneratedBy_Id(Long userId);
 
+    // Fetch a quiz by its id and by the id of the user who generated it
+    Optional<Quiz> findByIdAndGeneratedBy_Id(Long id, Long userId);
 }

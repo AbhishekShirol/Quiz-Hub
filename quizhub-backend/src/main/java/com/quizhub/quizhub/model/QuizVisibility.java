@@ -1,4 +1,7 @@
 package com.quizhub.quizhub.model;
 
-public class QuizVisibility {
+public enum QuizVisibility {
+    FILTERED,
+    PUBLIC,
+    PRIVATE
 }

@@ -210,19 +210,19 @@ public class QuestionService implements IQuestionService {
         return questionRepository.findByTopic(topic, PageRequest.of(0, numOfQuestions));
     }
 
-    @Override
-    public Question assignQuestionToQuiz(Long questionId, Long quizId) {
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new RuntimeException("Question not found"));
-
-        Quiz quiz = quizRepository.findById(quizId)
-                .orElseThrow(() -> new RuntimeException("Quiz not found"));
-
-        quiz.getQuestions().add(question);
-        quizRepository.save(quiz);
-
-        return question;
-    }
+//    @Override
+//    public Question assignQuestionToQuiz(Long questionId, Long quizId) {
+//        Question question = questionRepository.findById(questionId)
+//                .orElseThrow(() -> new RuntimeException("Question not found"));
+//
+//        Quiz quiz = quizRepository.findById(quizId)
+//                .orElseThrow(() -> new RuntimeException("Quiz not found"));
+//
+//        quiz.getQuestions().add(question);
+//        quizRepository.save(quiz);
+//
+//        return question;
+//    }
 
     //the questions accessed by the users who created
     @Override

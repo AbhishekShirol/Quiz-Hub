@@ -82,10 +82,12 @@ public class PublicController {
             String jwt = jwtUtil.generateToken(userDetails.getUsername());
             // Here, you would also retrieve the user id, e.g., from your User repository.
             Long userId = userRepository.findByUsername(user.getUsername()).get().getId();
+            String userRole = String.valueOf(userRepository.findByUsername(user.getUsername()).get().getRole());
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("token", jwt);
             responseBody.put("userId", userId);
             responseBody.put("username", user.getUsername());
+            responseBody.put("role", userRole);
             return new ResponseEntity<>(responseBody, HttpStatus.OK);
         } catch (Exception e){
             log.error("Exception occurred while creating AuthenticationToken", e);

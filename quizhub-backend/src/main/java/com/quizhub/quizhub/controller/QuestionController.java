@@ -366,12 +366,12 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.getAllQuestions());
     }
 
-    @PostMapping("/assign")
-    public ResponseEntity<Question> assignQuestionToQuiz(
-            @RequestParam Long questionId,
-            @RequestParam Long quizId) {
-        return ResponseEntity.ok(questionService.assignQuestionToQuiz(questionId, quizId));
-    }
+//    @PostMapping("/assign")
+//    public ResponseEntity<Question> assignQuestionToQuiz(
+//            @RequestParam Long questionId,
+//            @RequestParam Long quizId) {
+//        return ResponseEntity.ok(questionService.assignQuestionToQuiz(questionId, quizId));
+//    }
 
     // Getting the particular user questions
     @GetMapping("/get-questions")

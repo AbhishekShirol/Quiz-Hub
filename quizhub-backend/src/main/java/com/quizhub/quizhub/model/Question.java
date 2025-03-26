@@ -92,8 +92,8 @@ public class Question {
     @JoinColumn(name = "topic_id", nullable = false)
     private Topic topic;
 
-    @ManyToMany(mappedBy = "questions")
-    private List<Quiz> quizzes; // Many-to-Many relationship with quizzes
+//    @ManyToMany(mappedBy = "questions")
+//    private List<Quiz> quizzes; // Many-to-Many relationship with quizzes
 
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
