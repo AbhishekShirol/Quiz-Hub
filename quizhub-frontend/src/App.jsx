@@ -9,6 +9,8 @@ import Question from './pages/Educator/Questions'
 import AddQuestion from './pages/Educator/AddQuestion';
 import StudentDashboard from './pages/Student/StudentDashboard';
 import CreateQuiz from './pages/Educator/CreateQuiz'
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import ManageUsers from './pages/Admin/ManageUsers';
 
 
 
@@ -25,6 +27,12 @@ function App() {
       <Route path="/my-questions" element={<Question/>} />
       <Route path="/add-question" element={<AddQuestion/>} />
       <Route path="/create-quiz" element={<CreateQuiz/>} />
+
+
+      {/* Admin */}
+
+      <Route path="/admin-dashboard" element={<AdminDashboard />} />
+      <Route path="/manage-users" element={<ManageUsers />} />
       
     </Routes>
   );
