@@ -151,9 +151,8 @@ function Register() {
               value={formData.role}
               onChange={handleChange}
             >
-              <option value="STUDENT">Student</option>
+              <option value="STUDENT">STUDENT</option>
               <option value="EDUCATOR">EDUCATOR</option>
-              <option value="ADMIN">Admin</option>
             </select>
           </div>
           

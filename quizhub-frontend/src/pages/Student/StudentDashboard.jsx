@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function EducatorDashboard() {
+function StudentDashboard() {
   const [username, setUsername] = useState('');
   const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ function EducatorDashboard() {
   }, [navigate]);
 
   const handleLogout = () => {
-    // Remove JWT token and username from localStorage
+    // Remove authentication data from localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     localStorage.removeItem('userId');
@@ -39,14 +39,14 @@ function EducatorDashboard() {
             </a>
             {/* Navigation Links */}
             <div className="flex gap-6 w-full md:w-auto justify-center flex-wrap">
-              <a href="/my-questions" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
-                My Questions
+              <a href="/filtered-quiz" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
+                Filtered Quiz
               </a>
-              <a href="/create-quiz" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
-                Create Quiz
+              <a href="/private-quiz" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
+                Private Quiz
               </a>
-              <a href="/add-question" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
-                Add Question
+              <a href="/public-quiz" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
+                Public Quiz
               </a>
             </div>
             {/* Logout and Welcome */}
@@ -73,4 +73,4 @@ function EducatorDashboard() {
   );
 }
 
-export default EducatorDashboard;
+export default StudentDashboard;
