@@ -23,4 +23,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     List<Question> findByCreatedByUsername(String username);  // Fetch questions for a user
 
+    List<Question> findByTopic_IdIn(List<Long> topicIds, Pageable pageable);
+
 }

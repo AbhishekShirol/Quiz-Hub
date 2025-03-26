@@ -331,8 +331,10 @@
 package com.quizhub.quizhub.controller;
 
 import com.quizhub.quizhub.model.Question;
+import com.quizhub.quizhub.repository.QuestionRepository;
 import com.quizhub.quizhub.service.IQuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -349,6 +351,9 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequestMapping("/questions")
 @RequiredArgsConstructor
 public class QuestionController {
+
+    @Autowired
+    private QuestionRepository questionRepository;
 
     private final IQuestionService questionService;
 
@@ -456,7 +461,7 @@ public class QuestionController {
 
 
     @GetMapping("/get-question/{id}")
-    public ResponseEntity<?> getQuestionById(@PathVariable Long id) {
+    public ResponseEntity<?> getQuestionById(@PathVariable("id") Long id) {
         try {
             Optional<Question> question = questionService.getQuestionById(id);
             if (question.isPresent()) {
@@ -470,5 +475,13 @@ public class QuestionController {
                     .body("Error fetching question: " + e.getMessage());
         }
     }
+
+    @GetMapping("/batch")
+    public ResponseEntity<List<Question>> getQuestionsByIds(@RequestParam List<Long> ids) {
+        List<Question> questions = questionRepository.findAllById(ids);
+        return ResponseEntity.ok(questions);
+    }
+
+
 
 }
