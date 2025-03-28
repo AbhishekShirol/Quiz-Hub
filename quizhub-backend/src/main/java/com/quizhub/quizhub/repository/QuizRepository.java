@@ -22,5 +22,9 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
     // Get filtered quizzes for a specific user
     List<Quiz> findByGeneratedBy_IdAndVisibility(Long userId, QuizVisibility visibility);
 
+    List<Quiz> findByVisibility(QuizVisibility visibility);
+
+    Optional<Quiz> findByPrivateCode(String privateCode);
+
 
 }

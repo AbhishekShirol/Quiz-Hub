@@ -52,6 +52,12 @@ public class QuizService implements IQuizService {
         return quizRepository.findById(quizId).map(QuizDTO::new);
     }
 
+    public List<Quiz> getQuizzesByUserAndVisibility(Long userId, QuizVisibility visibility) {
+        return quizRepository.findByGeneratedBy_IdAndVisibility(userId, visibility);
+    }
 
+    public List<Quiz> getQuizzesByVisibility(QuizVisibility visibility) {
+        return quizRepository.findByVisibility(visibility);
+    }
 
 }
