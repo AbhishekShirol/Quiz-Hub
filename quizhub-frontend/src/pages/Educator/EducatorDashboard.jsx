@@ -42,6 +42,9 @@ function EducatorDashboard() {
               <a href="/my-questions" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
                 My Questions
               </a>
+              <a href="/my-quizzes" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
+                My Quizzes
+              </a>
               <a href="/create-quiz" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
                 Create Quiz
               </a>

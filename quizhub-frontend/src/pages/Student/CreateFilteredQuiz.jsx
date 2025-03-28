@@ -161,7 +161,7 @@ const CreateFilteredQuiz = () => {
           <div className="mt-6 text-center">
             <button
               onClick={handleBack}
-              className="px-5 py-2 bg-slate-700 text-slate-200 rounded hover:bg-slate-600 transition-colors"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded"
             >
               &larr; Back
             </button>

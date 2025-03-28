@@ -16,6 +16,9 @@ import AdminDashboard from './pages/Admin/AdminDashboard';
 import ManageUsers from './pages/Admin/ManageUsers';
 import QuizAttemptsList from './pages/Student/QuizAttemptsList';
 import QuizAttemptView from './pages/Student/QuizAttemptView';
+import EducatorQuizzesList from './pages/Educator/EducatorQuizzesList';
+import PublicQuizList from './pages/Student/PublicQuizList';
+import PrivateQuizSearch from './pages/Student/PrivateQuizSearch';
 
 
 
@@ -39,6 +42,11 @@ function App() {
       <Route path="/take-quiz/:quizId" element={<QuizAttempt />} />
       <Route path="/my-quiz-attempts" element={<QuizAttemptsList/>} />
       <Route path="/quiz-attempt/view/:attemptId" element={<QuizAttemptView/>} />
+
+      <Route path="/my-quizzes" element={<EducatorQuizzesList/>} />
+
+      <Route path="public-quiz" element={<PublicQuizList/>} />
+      <Route path="private-quiz" element={<PrivateQuizSearch/>} />
 
 
 
