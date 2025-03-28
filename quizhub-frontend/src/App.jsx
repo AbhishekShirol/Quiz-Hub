@@ -14,6 +14,8 @@ import QuizAttempt from './pages/Student/QuizAttempt';
 
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import ManageUsers from './pages/Admin/ManageUsers';
+import QuizAttemptsList from './pages/Student/QuizAttemptsList';
+import QuizAttemptView from './pages/Student/QuizAttemptView';
 
 
 
@@ -35,6 +37,8 @@ function App() {
       <Route path='/filtered-quiz' element={<FilteredQuiz/>}/>
 
       <Route path="/take-quiz/:quizId" element={<QuizAttempt />} />
+      <Route path="/my-quiz-attempts" element={<QuizAttemptsList/>} />
+      <Route path="/quiz-attempt/view/:attemptId" element={<QuizAttemptView/>} />
 
 
 

@@ -43,6 +43,9 @@ function StudentDashboard() {
             <a href="/create-filtered-quiz" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
               Create Filtered Quiz
             </a>
+            <a href="/my-quiz-attempts" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
+              My Attempts
+            </a>
 
             {/* Take Quiz Dropdown */}
             <div className="relative group">
