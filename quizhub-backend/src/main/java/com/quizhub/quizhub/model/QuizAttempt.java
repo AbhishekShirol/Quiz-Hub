@@ -1,5 +1,6 @@
 package com.quizhub.quizhub.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,9 +27,10 @@ public class QuizAttempt {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    private Integer score;
+    private Float score;
 
     @OneToMany(mappedBy = "quizAttempt", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<QuestionResponse> responses;
 
     // Methods for starting, submitting, and calculating score can be in a service layer

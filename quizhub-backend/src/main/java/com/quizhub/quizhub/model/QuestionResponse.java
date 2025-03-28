@@ -1,5 +1,7 @@
 package com.quizhub.quizhub.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +28,7 @@ public class QuestionResponse {
 
     @ManyToOne
     @JoinColumn(name = "attempt_id", nullable = false)
+    @JsonBackReference
     private QuizAttempt quizAttempt;
 
     // saveResponse() could be implemented in the service layer after persisting
