@@ -2,11 +2,9 @@ package com.quizhub.quizhub.service;
 
 import com.quizhub.quizhub.dto.QuestionResponseDTO;
 import com.quizhub.quizhub.dto.QuizAttemptDTO;
+import com.quizhub.quizhub.dto.QuizAttemptWithStudentDTO;
 import com.quizhub.quizhub.model.*;
-import com.quizhub.quizhub.repository.QuestionRepository;
-import com.quizhub.quizhub.repository.QuestionResponseRepository;
-import com.quizhub.quizhub.repository.QuizAttemptRepository;
-import com.quizhub.quizhub.repository.QuizRepository;
+import com.quizhub.quizhub.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.SpringVersion;
 import org.springframework.stereotype.Service;
@@ -25,22 +23,26 @@ public class QuizAttemptService {
 
     @Autowired
     private QuestionResponseRepository questionResponseRepository;
-    
+
     @Autowired
     private QuestionRepository questionRepository;
 
     @Autowired
     private QuizRepository quizRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+
     public QuizAttempt startQuiz(Long quizId, Long studentId) {
         // Check for an existing active attempt to prevent duplicate entries
         List<QuizAttempt> activeAttempts = quizAttemptRepository.findByQuizIdAndStudentIdAndEndTimeIsNull(quizId, studentId);
-        
+
         // If there's an active attempt, return it instead of creating a new one
         if (!activeAttempts.isEmpty()) {
             return activeAttempts.get(0);
         }
-        
+
         // Create a new attempt if no active attempt exists
         QuizAttempt attempt = QuizAttempt.builder()
                 .quizId(quizId)
@@ -54,30 +56,30 @@ public class QuizAttemptService {
         // Log the attempt ID and responses for debugging
         System.out.println("Processing submission for attemptId: " + attemptId);
         System.out.println("Number of responses: " + (responses != null ? responses.size() : 0));
-        
+
         QuizAttempt attempt = quizAttemptRepository.findById(attemptId)
                 .orElseThrow(() -> new RuntimeException("Attempt not found"));
 
         // Set end time for the attempt
         LocalDateTime endTime = LocalDateTime.now();
         attempt.setEndTime(endTime);
-        
+
         float totalScore = 0F;
 
         // For each response, calculate a score, set timeTaken, and mark correctness
         for (QuestionResponse response : responses) {
             // Get the question from the repository
             Optional<Question> questionOpt = questionRepository.findById(response.getQuestionId());
-            
+
             if (questionOpt.isPresent()) {
                 Question question = questionOpt.get();
                 boolean isCorrect = false;
                 float score = 0F;
-                
+
                 // Check if the student response is correct based on question type
                 if (response.getStudentResponse() != null && !response.getStudentResponse().trim().isEmpty()) {
                     List<String> correctOptions = question.getCorrectOptions();
-                    
+
                     if (question.getQuestionType() == QuestionType.TRUE_FALSE) {
                         // For TRUE_FALSE questions, direct comparison
                         isCorrect = correctOptions.contains(response.getStudentResponse().trim());
@@ -85,7 +87,7 @@ public class QuizAttemptService {
                         // For MCQ questions, check if the selected option is in the correct options
                         isCorrect = correctOptions.contains(response.getStudentResponse().trim());
                     }
-                    
+
                     // Calculate score based on difficulty and correctness
                     if (isCorrect) {
                         switch (question.getDifficulty()) {
@@ -101,16 +103,16 @@ public class QuizAttemptService {
                             default:
                                 score = 1F;
                         }
-                        
+
                         // Reduce score if hint was used (25% penalty)
                         if (response.getHintUsed() != null && response.getHintUsed()) {
                             score *= 0.75F; // 25% penalty for using hint
                         }
                     }
-                    
+
                     totalScore += score;
                 }
-                
+
                 // Calculate time taken for this question in seconds
                 // Each response should have its own time tracking
                 int timeTaken = 0;
@@ -123,7 +125,7 @@ public class QuizAttemptService {
                     Duration duration = Duration.between(attempt.getStartTime(), endTime);
                     timeTaken = (int) duration.getSeconds();
                 }
-                
+
                 // Set the calculated values
                 response.setIsCorrect(isCorrect);
                 response.setScore(score);
@@ -134,20 +136,20 @@ public class QuizAttemptService {
                 response.setScore(0F);
                 response.setTimeTaken(0);
             }
-            
+
             // Associate the response with the current attempt
             response.setQuizAttempt(attempt);
         }
 
         // Set responses in the attempt object
         attempt.setResponses(responses);
-        
+
         // Set total score for the attempt
         attempt.setScore(totalScore);
 
         // Save the attempt first to ensure it exists in the database
         attempt = quizAttemptRepository.save(attempt);
-        
+
         // Save all responses
         questionResponseRepository.saveAll(responses);
 
@@ -194,6 +196,60 @@ public class QuizAttemptService {
     }
 
 
+//    public QuizAttemptDTO getAttemptDetails(Long attemptId) {
+//        QuizAttempt attempt = quizAttemptRepository.findById(attemptId)
+//                .orElseThrow(() -> new RuntimeException("Attempt not found with ID: " + attemptId));
+//
+//        QuizAttemptDTO dto = new QuizAttemptDTO();
+//        dto.setAttemptId(attempt.getAttemptId());
+//        dto.setQuizId(attempt.getQuizId());
+//        dto.setStudentId(attempt.getStudentId());
+//        dto.setStartTime(attempt.getStartTime());
+//        dto.setEndTime(attempt.getEndTime());
+//        dto.setScore(attempt.getScore());
+//
+//        // Fetch the Quiz details using the quizId stored in the attempt
+//        Optional<Quiz> quizOpt = quizRepository.findById(attempt.getQuizId());
+//        if (quizOpt.isPresent()) {
+//            Quiz quiz = quizOpt.get();
+//            dto.setQuizTitle(quiz.getTitle());
+//            dto.setQuizDescription(quiz.getDescription());
+//            dto.setQuizVisibility(quiz.getVisibility().name());
+//        } else {
+//            dto.setQuizTitle("N/A");
+//            dto.setQuizDescription("N/A");
+//            dto.setQuizVisibility("N/A");
+//        }
+//
+//        // Map each QuestionResponse to a DTO including correct answers
+//        List<QuestionResponseDTO> responseDTOs = attempt.getResponses().stream().map(response -> {
+//            QuestionResponseDTO rDto = new QuestionResponseDTO();
+//            rDto.setResponseId(response.getResponseId());
+//            rDto.setQuestionId(response.getQuestionId());
+//            rDto.setStudentResponse(response.getStudentResponse());
+//            rDto.setIsCorrect(response.getIsCorrect());
+//            rDto.setHintUsed(response.getHintUsed());
+//            rDto.setScore(response.getScore());
+//            rDto.setTimeTaken(response.getTimeTaken());
+//
+//            // Fetch the question to obtain correct answer(s)
+//            Optional<Question> qOpt = questionRepository.findById(response.getQuestionId());
+//            if (qOpt.isPresent()) {
+//                Question q = qOpt.get();
+//                // Assuming getCorrectOptions() returns a List<String>
+//                List<String> correctOptions = q.getCorrectOptions();
+//                rDto.setCorrectAnswer(String.join(", ", correctOptions));
+//            } else {
+//                rDto.setCorrectAnswer("N/A");
+//            }
+//            return rDto;
+//        }).collect(Collectors.toList());
+//
+//        dto.setResponses(responseDTOs);
+//
+//        return dto;
+//    }
+
     public QuizAttemptDTO getAttemptDetails(Long attemptId) {
         QuizAttempt attempt = quizAttemptRepository.findById(attemptId)
                 .orElseThrow(() -> new RuntimeException("Attempt not found with ID: " + attemptId));
@@ -206,7 +262,7 @@ public class QuizAttemptService {
         dto.setEndTime(attempt.getEndTime());
         dto.setScore(attempt.getScore());
 
-        // Fetch the Quiz details using the quizId stored in the attempt
+        // Fetch quiz details using the quizId stored in the attempt
         Optional<Quiz> quizOpt = quizRepository.findById(attempt.getQuizId());
         if (quizOpt.isPresent()) {
             Quiz quiz = quizOpt.get();
@@ -218,6 +274,10 @@ public class QuizAttemptService {
             dto.setQuizDescription("N/A");
             dto.setQuizVisibility("N/A");
         }
+
+        // Fetch student name using studentId
+        Optional<User> userOpt = userRepository.findById(attempt.getStudentId());
+        dto.setStudentName(userOpt.map(User::getUsername).orElse("N/A"));
 
         // Map each QuestionResponse to a DTO including correct answers
         List<QuestionResponseDTO> responseDTOs = attempt.getResponses().stream().map(response -> {
@@ -234,7 +294,6 @@ public class QuizAttemptService {
             Optional<Question> qOpt = questionRepository.findById(response.getQuestionId());
             if (qOpt.isPresent()) {
                 Question q = qOpt.get();
-                // Assuming getCorrectOptions() returns a List<String>
                 List<String> correctOptions = q.getCorrectOptions();
                 rDto.setCorrectAnswer(String.join(", ", correctOptions));
             } else {
@@ -247,4 +306,25 @@ public class QuizAttemptService {
 
         return dto;
     }
+
+    public List<QuizAttemptWithStudentDTO> getAttemptsByQuizWithStudentName(Long quizId) {
+        List<QuizAttempt> attempts = quizAttemptRepository.findByQuizId(quizId);
+        return attempts.stream().map(attempt -> {
+            QuizAttemptWithStudentDTO dto = new QuizAttemptWithStudentDTO();
+            dto.setAttemptId(attempt.getAttemptId());
+            dto.setQuizId(attempt.getQuizId());
+            dto.setStudentId(attempt.getStudentId());
+            dto.setStartTime(attempt.getStartTime());
+            dto.setEndTime(attempt.getEndTime());
+            dto.setScore(attempt.getScore());
+            // Map responses if needed; otherwise, you can leave this empty or map them via a helper method.
+            // For example:
+            // dto.setResponses(mapQuestionResponses(attempt.getResponses()));
+            // Now, fetch the student's name
+            Optional<User> userOpt = userRepository.findById(attempt.getStudentId());
+            dto.setStudentName(userOpt.map(User::getUsername).orElse("N/A"));
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
 }

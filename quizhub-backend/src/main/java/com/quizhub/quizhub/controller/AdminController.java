@@ -31,4 +31,14 @@ public class AdminController {
     public void createUser(@RequestBody User user){
         userService.saveAdmin(user);
     }
+
+    @DeleteMapping("/delete-user/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+        boolean deleted = userService.deleteUserById(userId);
+        if (deleted) {
+            return ResponseEntity.ok("User with ID " + userId + " deleted successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with ID " + userId + " not found.");
+        }
+    }
 }

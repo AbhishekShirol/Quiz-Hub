@@ -35,4 +35,3 @@ public class QuizAttempt {
 
     // Methods for starting, submitting, and calculating score can be in a service layer
 }
-

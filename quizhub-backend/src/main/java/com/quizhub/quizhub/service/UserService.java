@@ -113,4 +113,12 @@ public class UserService {
     public List<User> getAll(){
         return userRepository.findAll();
     }
+
+    public boolean deleteUserById(Long userId) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+            return true;
+        }
+        return false;
+    }
 }

@@ -1,5 +1,6 @@
 package com.quizhub.quizhub.controller;
 import com.quizhub.quizhub.dto.QuizAttemptDTO;
+import com.quizhub.quizhub.dto.QuizAttemptWithStudentDTO;
 import com.quizhub.quizhub.model.QuestionResponse;
 import com.quizhub.quizhub.model.QuizAttempt;
 import com.quizhub.quizhub.service.QuizAttemptService;
@@ -91,5 +92,12 @@ public class QuizAttemptController {
         QuizAttemptDTO dto = quizAttemptService.getAttemptDetails(attemptId);
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/quiz/{quizId}")
+    public ResponseEntity<List<QuizAttemptWithStudentDTO>> getAttemptsByQuiz(@PathVariable Long quizId) {
+        List<QuizAttemptWithStudentDTO> attemptsDto = quizAttemptService.getAttemptsByQuizWithStudentName(quizId);
+        return ResponseEntity.ok(attemptsDto);
+    }
+
 
 }
