@@ -9,6 +9,9 @@ function QuizAttemptView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Get user role from localStorage (Assuming it's stored after login)
+  const userRole = localStorage.getItem("role"); // 'STUDENT' or 'EDUCATOR'
+
   useEffect(() => {
     const fetchAttemptDetails = async () => {
       try {
@@ -24,6 +27,16 @@ function QuizAttemptView() {
 
     fetchAttemptDetails();
   }, [attemptId]);
+
+  const handleBack = () => {
+    if (userRole === "STUDENT") {
+      navigate("/student-dashboard"); // Redirect student to student dashboard
+    } else if (userRole === "EDUCATOR") {
+      navigate("/educator-dashboard"); // Redirect educator to educator dashboard
+    } else {
+      navigate(-1); // Default fallback (go back one step)
+    }
+  };
 
   if (loading) {
     return (
@@ -55,6 +68,7 @@ function QuizAttemptView() {
           <p><strong>Start Time:</strong> {new Date(attemptDetails.startTime).toLocaleString()}</p>
           <p><strong>End Time:</strong> {attemptDetails.endTime ? new Date(attemptDetails.endTime).toLocaleString() : "In Progress"}</p>
         </div>
+
         <h2 className="text-2xl font-semibold mb-2">Responses:</h2>
         <ul className="bg-slate-800 p-4 rounded">
           {attemptDetails.responses.map(response => (
@@ -68,9 +82,10 @@ function QuizAttemptView() {
             </li>
           ))}
         </ul>
+
         <div className="flex justify-center mt-6">
           <button
-            onClick={() => navigate("/student-dashboard")}
+            onClick={handleBack}
             className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded"
           >
             Back

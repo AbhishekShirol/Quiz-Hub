@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // For navigation
 import axios from 'axios';
 
 function ManageUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // For back button navigation
 
   useEffect(() => {
-    // Retrieve token from localStorage for authentication
     const token = localStorage.getItem('token');
 
-    // Fetch users from the endpoint
     const fetchUsers = async () => {
       try {
         const response = await axios.get('http://localhost:8080/admin/all-users', {
@@ -32,24 +32,26 @@ function ManageUsers() {
 
   const handleDeleteUser = async (userId) => {
     const token = localStorage.getItem('token');
+
+    // Show confirmation alert before deleting
+    const confirmDelete = window.confirm(`Are you sure you want to delete user with ID ${userId}?`);
+    if (!confirmDelete) return; // Stop if user cancels
+
     try {
       await axios.delete(`http://localhost:8080/admin/delete-user/${userId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
+
       // Remove the deleted user from the state
       setUsers(users.filter(user => user.id !== userId));
+
+      alert(`User with ID ${userId} deleted successfully!`); // Show success alert
     } catch (err) {
       console.error('Error deleting user:', err);
       alert('Failed to delete user');
     }
-  };
-
-  const handleEditUser = (user) => {
-    // Implement edit functionality 
-    // This could open a modal or navigate to an edit page
-    console.log('Edit user:', user);
   };
 
   if (loading) {
@@ -71,8 +73,16 @@ function ManageUsers() {
   return (
     <div className="min-h-screen bg-slate-900 text-slate-200 p-8">
       <div className="container mx-auto">
-        <h1 className="text-3xl font-bold mb-4">Manage Users</h1>
-        
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-3xl font-bold">Manage Users</h1>
+          <button 
+            onClick={() => navigate(-1)} // Go back to the previous page
+            className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded transition-colors"
+          >
+            Back
+          </button>
+        </div>
+
         <div className="bg-slate-800 rounded-lg overflow-hidden shadow-lg">
           <table className="w-full">
             <thead className="bg-slate-700">
@@ -106,12 +116,6 @@ function ManageUsers() {
                   </td>
                   <td className="px-4 py-3 text-center">
                     <div className="flex justify-center gap-2">
-                      <button 
-                        onClick={() => handleEditUser(user)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded transition-colors"
-                      >
-                        Edit
-                      </button>
                       <button 
                         onClick={() => handleDeleteUser(user.id)}
                         className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition-colors"

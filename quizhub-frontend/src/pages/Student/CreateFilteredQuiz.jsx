@@ -163,14 +163,11 @@ const CreateFilteredQuiz = () => {
               onClick={handleBack}
               className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded"
             >
-              &larr; Back
+              Back
             </button>
           </div>
         </div>
       </section>
-      <footer className="bg-slate-800 border-t border-slate-700 py-4 text-center text-slate-400 text-sm">
-        <p>© 2025 QuizHub. All rights reserved.</p>
-      </footer>
     </div>
   );
 };

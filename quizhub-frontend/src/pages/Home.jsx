@@ -16,16 +16,16 @@ function QuizHub() {
 
             {/* Navigation Links with Bigger Font */}
             <div className="flex gap-6 w-full md:w-auto justify-center flex-wrap">
-              <a href="home" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">Home</a>
-              <a href="quizzes" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">Quizzes</a>
-              <a href="create" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">Create</a>
+              <a href="/login" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">Home</a>
+              <a href="/login" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">Quizzes</a>
+              <a href="/login" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">Create</a>
             </div>
 
             {/* Login & Signup Buttons */}
             <div className="flex gap-4 items-center w-full md:w-auto justify-center">
               <button className="px-5 py-2 rounded-md text-lg font-medium bg-indigo-600 hover:bg-indigo-700 text-white transition-colors" 
               onClick={() => (window.location.href = "/login")} >
-                Log in
+                Log in / Signup
               </button>
             </div>
           </nav>
@@ -34,13 +34,13 @@ function QuizHub() {
 
       <section className="py-16 text-center">
         <h1 className="text-3xl font-bold">Create and share <span className="text-indigo-600">interactive quizzes</span></h1>
+        <br />
         <p className="text-lg text-slate-400">Engage learners with easy-to-build quizzes.</p>
-        <button className="bg-indigo-600 px-4 py-2 mt-4 text-white hover:bg-indigo-700">Get Started</button>
+        <br />
+        <br />
+        <button className="px-5 py-2 rounded-md text-lg font-medium bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
+        onClick={() => (window.location.href = "/login")} >Get Started</button>
       </section>
-
-      <footer className="bg-slate-800 border-t border-slate-700 py-4 text-center text-slate-400 text-sm">
-        <p>© 2025 QuizHub. All rights reserved.</p>
-      </footer>
     </div>
   );
 }

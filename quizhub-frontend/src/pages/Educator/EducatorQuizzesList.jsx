@@ -53,6 +53,10 @@ function EducatorQuizzesList() {
     }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900 text-slate-200">
@@ -98,7 +102,7 @@ function EducatorQuizzesList() {
                       onClick={() => handleViewQuiz(quiz.id)}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded mr-2"
                     >
-                      View
+                      attempts
                     </button>
                     <button
                       onClick={() => handleDeleteQuiz(quiz.id)}
@@ -141,7 +145,7 @@ function EducatorQuizzesList() {
                       onClick={() => handleViewQuiz(quiz.id)}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded mr-2"
                     >
-                      View
+                      attempts
                     </button>
                     <button
                       onClick={() => handleDeleteQuiz(quiz.id)}
@@ -157,6 +161,16 @@ function EducatorQuizzesList() {
         ) : (
           <p>No private quizzes found.</p>
         )}
+
+        {/* Back Button Section */}
+        <div className="mt-6 flex justify-center">
+          <button
+            onClick={handleBack}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded"
+          >
+            Back
+          </button>
+        </div>
       </div>
     </div>
   );
