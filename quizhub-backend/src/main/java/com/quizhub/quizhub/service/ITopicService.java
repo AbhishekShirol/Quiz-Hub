@@ -8,5 +8,4 @@ public interface ITopicService {
     Topic createTopic(Topic topic);
     List<Topic> getAllTopics();
     Optional<Topic> getTopicById(Long id);
-//    void deleteTopic(Long id);
 }

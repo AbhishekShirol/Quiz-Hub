@@ -16,17 +16,20 @@ public class TopicController {
         this.topicService = topicService;
     }
 
+//    creating the topic[]
     @PostMapping("create-topic")
     public ResponseEntity<Topic> createTopic(@RequestBody Topic topic) {
         Topic savedTopic = topicService.createTopic(topic);
         return ResponseEntity.ok(savedTopic);
     }
 
+//    getting all the topics[]
     @GetMapping("getall-topics")
     public ResponseEntity<List<Topic>> getAllTopics() {
         return ResponseEntity.ok(topicService.getAllTopics());
     }
 
+//    getting the topics based on the topic id []
     @GetMapping("gettopic/{id}")
     public ResponseEntity<Topic> getTopicById(@PathVariable Long id) {
         return topicService.getTopicById(id)

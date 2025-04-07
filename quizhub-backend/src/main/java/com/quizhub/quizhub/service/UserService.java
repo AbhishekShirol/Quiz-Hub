@@ -38,10 +38,10 @@ public class UserService {
     }
 
 
-    // Save or update user
-    public void saveEntry(User user) {
-        userRepository.save(user);
-    }
+//    // Save or update user
+//    public void saveEntry(User user) {
+//        userRepository.save(user);
+//    }
 
 
     public User createUser(User user) {
@@ -104,11 +104,11 @@ public class UserService {
         userRepository.deleteByUsername(userName);
     }
 
-    // Find a user by their username
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-    }
+//    // Find a user by their username
+//    public User findByUsername(String username) {
+//        return userRepository.findByUsername(username)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+//    }
 
     public List<User> getAll(){
         return userRepository.findAll();

@@ -1,5 +1,6 @@
 package com.quizhub.quizhub.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,4 +40,12 @@ public class User {
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Question> questions;
+
+    @OneToMany(mappedBy = "generatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Quiz> quizzes;
 }

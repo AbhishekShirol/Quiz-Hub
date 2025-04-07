@@ -22,16 +22,6 @@ public class QuizService implements IQuizService {
     }
 
     @Override
-    public List<Quiz> getQuizzesByUser(Long userId) {
-        return quizRepository.findByGeneratedBy_Id(userId);
-    }
-
-    @Override
-    public Optional<Quiz> getQuizByIdAndUser(Long id, Long userId) {
-        return quizRepository.findByIdAndGeneratedBy_Id(id, userId);
-    }
-
-    @Override
     public void deleteQuiz(Long id) {
         quizRepository.deleteById(id);
     }

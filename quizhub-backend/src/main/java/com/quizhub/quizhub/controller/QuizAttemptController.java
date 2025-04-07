@@ -17,6 +17,7 @@ public class QuizAttemptController {
     @Autowired
     private QuizAttemptService quizAttemptService;
 
+//  starting the quiz attempt[]
     @PostMapping("/start")
     public ResponseEntity<QuizAttempt> startQuiz(
             @RequestParam Long quizId,
@@ -25,6 +26,7 @@ public class QuizAttemptController {
         return ResponseEntity.ok(attempt);
     }
 
+//  submitting the quiz attempted[]
     @PostMapping("/submit")
     public ResponseEntity<QuizAttempt> submitQuiz(
             @RequestParam Long attemptId,
@@ -73,26 +75,28 @@ public class QuizAttemptController {
     }
 
 
+//  getting all the attempts[]
     @GetMapping("/all/{studentId}")
     public ResponseEntity<List<QuizAttemptDTO>> getAttemptsByStudent(@PathVariable("studentId") Long studentId) {
         List<QuizAttemptDTO> attemptsDto = quizAttemptService.getAttemptsWithQuizInfo(studentId);
         return ResponseEntity.ok(attemptsDto);
     }
 
-    // (Optional) Implement a delete endpoint if needed:
+    //deleting the quiz attempt[]
     @DeleteMapping("/{attemptId}")
     public ResponseEntity<Void> deleteAttempt(@PathVariable("attemptId") Long attemptId) {
         quizAttemptService.deleteAttempt(attemptId);
         return ResponseEntity.noContent().build();
     }
 
-
+//  the detailed view of quiz attempt[]
     @GetMapping("/{attemptId}")
     public ResponseEntity<QuizAttemptDTO> getAttemptDetails(@PathVariable("attemptId") Long attemptId) {
         QuizAttemptDTO dto = quizAttemptService.getAttemptDetails(attemptId);
         return ResponseEntity.ok(dto);
     }
 
+//    this will display the quiz attempt detail
     @GetMapping("/quiz/{quizId}")
     public ResponseEntity<List<QuizAttemptWithStudentDTO>> getAttemptsByQuiz(@PathVariable Long quizId) {
         List<QuizAttemptWithStudentDTO> attemptsDto = quizAttemptService.getAttemptsByQuizWithStudentName(quizId);

@@ -45,35 +45,14 @@ public class PublicController {
     @Autowired
     private UserRepository userRepository;
 
-    //Create User
+    //Create User register[]
     @PostMapping("/create-user")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user);
         return ResponseEntity.status(201).body(createdUser); // HTTP 201 CREATED
     }
 
-
-    @PostMapping("/signup")
-    public void signup(@RequestBody User user){
-        userService.saveEntry(user);
-    }
-
-
-//    @PostMapping("/login")
-//    public ResponseEntity<String> login(@RequestBody User user){
-//        try{
-//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-//            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-//            String jwt = jwtUtil.generateToken(userDetails.getUsername());
-//            return new ResponseEntity<>(jwt, HttpStatus.OK);
-//        }catch (Exception e){
-//            log.error("Exception occured while creating AuthenticationToken",e);
-//            return new ResponseEntity<>("Incorrect Username or Password",HttpStatus.BAD_REQUEST);
-//
-//        }
-//    }
-
-
+//  login[]
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user){
         try {

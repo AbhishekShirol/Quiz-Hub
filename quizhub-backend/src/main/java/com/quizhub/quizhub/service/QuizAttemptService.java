@@ -5,6 +5,8 @@ import com.quizhub.quizhub.dto.QuizAttemptDTO;
 import com.quizhub.quizhub.dto.QuizAttemptWithStudentDTO;
 import com.quizhub.quizhub.model.*;
 import com.quizhub.quizhub.repository.*;
+import com.quizhub.quizhub.strategy.AdvancedScoringStrategy;
+import com.quizhub.quizhub.strategy.ScoringStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.SpringVersion;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,12 @@ public class QuizAttemptService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private ScoringStrategy scoringStrategy;
+
+    @Autowired
+    private AdvancedScoringStrategy advancedScoringStrategy;
 
 
     public QuizAttempt startQuiz(Long quizId, Long studentId) {
@@ -88,30 +96,15 @@ public class QuizAttemptService {
                         isCorrect = correctOptions.contains(response.getStudentResponse().trim());
                     }
 
-                    // Calculate score based on difficulty and correctness
+                    // Calculate score based on difficulty and correctness using the scoring strategy
                     if (isCorrect) {
-                        switch (question.getDifficulty()) {
-                            case EASY:
-                                score = 1F;
-                                break;
-                            case MEDIUM:
-                                score = 2F;
-                                break;
-                            case HARD:
-                                score = 3F;
-                                break;
-                            default:
-                                score = 1F;
-                        }
-
-                        // Reduce score if hint was used (25% penalty)
-                        if (response.getHintUsed() != null && response.getHintUsed()) {
-                            score *= 0.75F; // 25% penalty for using hint
-                        }
+                        boolean hintUsed = response.getHintUsed() != null && response.getHintUsed();
+                        score = advancedScoringStrategy.calculateScore(question.getDifficulty(), hintUsed);
                     }
-
-                    totalScore += score;
                 }
+
+                totalScore += score;
+            
 
                 // Calculate time taken for this question in seconds
                 // Each response should have its own time tracking
@@ -195,60 +188,6 @@ public class QuizAttemptService {
         quizAttemptRepository.deleteById(attemptId);
     }
 
-
-//    public QuizAttemptDTO getAttemptDetails(Long attemptId) {
-//        QuizAttempt attempt = quizAttemptRepository.findById(attemptId)
-//                .orElseThrow(() -> new RuntimeException("Attempt not found with ID: " + attemptId));
-//
-//        QuizAttemptDTO dto = new QuizAttemptDTO();
-//        dto.setAttemptId(attempt.getAttemptId());
-//        dto.setQuizId(attempt.getQuizId());
-//        dto.setStudentId(attempt.getStudentId());
-//        dto.setStartTime(attempt.getStartTime());
-//        dto.setEndTime(attempt.getEndTime());
-//        dto.setScore(attempt.getScore());
-//
-//        // Fetch the Quiz details using the quizId stored in the attempt
-//        Optional<Quiz> quizOpt = quizRepository.findById(attempt.getQuizId());
-//        if (quizOpt.isPresent()) {
-//            Quiz quiz = quizOpt.get();
-//            dto.setQuizTitle(quiz.getTitle());
-//            dto.setQuizDescription(quiz.getDescription());
-//            dto.setQuizVisibility(quiz.getVisibility().name());
-//        } else {
-//            dto.setQuizTitle("N/A");
-//            dto.setQuizDescription("N/A");
-//            dto.setQuizVisibility("N/A");
-//        }
-//
-//        // Map each QuestionResponse to a DTO including correct answers
-//        List<QuestionResponseDTO> responseDTOs = attempt.getResponses().stream().map(response -> {
-//            QuestionResponseDTO rDto = new QuestionResponseDTO();
-//            rDto.setResponseId(response.getResponseId());
-//            rDto.setQuestionId(response.getQuestionId());
-//            rDto.setStudentResponse(response.getStudentResponse());
-//            rDto.setIsCorrect(response.getIsCorrect());
-//            rDto.setHintUsed(response.getHintUsed());
-//            rDto.setScore(response.getScore());
-//            rDto.setTimeTaken(response.getTimeTaken());
-//
-//            // Fetch the question to obtain correct answer(s)
-//            Optional<Question> qOpt = questionRepository.findById(response.getQuestionId());
-//            if (qOpt.isPresent()) {
-//                Question q = qOpt.get();
-//                // Assuming getCorrectOptions() returns a List<String>
-//                List<String> correctOptions = q.getCorrectOptions();
-//                rDto.setCorrectAnswer(String.join(", ", correctOptions));
-//            } else {
-//                rDto.setCorrectAnswer("N/A");
-//            }
-//            return rDto;
-//        }).collect(Collectors.toList());
-//
-//        dto.setResponses(responseDTOs);
-//
-//        return dto;
-//    }
 
     public QuizAttemptDTO getAttemptDetails(Long attemptId) {
         QuizAttempt attempt = quizAttemptRepository.findById(attemptId)
