@@ -93,6 +93,7 @@ import PrivateQuizSearch from './pages/Student/PrivateQuizSearch';
 // Admin
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import ManageUsers from './pages/Admin/ManageUsers';
+import AdminRegistration from './pages/Admin/AdminRegistration';
 
 function App() {
   return (
@@ -169,6 +170,10 @@ function App() {
       <Route
         path="/manage-users"
         element={<ProtectedRoute element={ManageUsers} allowedRoles={["ADMIN"]} />}
+      />
+      <Route
+        path="/add-admin"
+        element={<ProtectedRoute element={AdminRegistration} allowedRoles={["ADMIN"]} />}
       />
     </Routes>
   );

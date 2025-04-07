@@ -117,7 +117,7 @@ function QuizAttemptsList() {
         </table>
         <div className="flex justify-center mt-6">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/student-dashboard")}
             className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded"
           >
             Back

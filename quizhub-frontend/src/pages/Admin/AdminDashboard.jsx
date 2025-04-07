@@ -42,6 +42,9 @@ function AdminDashboard() {
               <a href="/manage-users" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
                 Manage Users
               </a>
+              <a href="/add-admin" className="text-slate-400 font-medium text-lg hover:text-indigo-600 transition-colors">
+                Add Admin
+              </a>
             </div>
             {/* Logout and Welcome */}
             <div className="flex gap-4 items-center w-full md:w-auto justify-center">

@@ -30,7 +30,7 @@ function QuizAttemptView() {
 
   const handleBack = () => {
     if (userRole === "STUDENT") {
-      navigate("/student-dashboard"); // Redirect student to student dashboard
+      navigate("/my-quiz-attempts"); // Redirect student to student dashboard
     } else if (userRole === "EDUCATOR") {
       navigate("/educator-dashboard"); // Redirect educator to educator dashboard
     } else {

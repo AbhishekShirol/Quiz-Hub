@@ -7,7 +7,6 @@ function QuizAttempt() {
   const { quizId } = useParams();
   const navigate = useNavigate();
 
-  // State variables
   const [quiz, setQuiz] = useState(null);
   const [attemptId, setAttemptId] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -16,28 +15,20 @@ function QuizAttempt() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Track if a hint was used per question
   const [hintsUsed, setHintsUsed] = useState({});
-
-  // Track the cumulative time spent on each question (in seconds)
   const [questionTimes, setQuestionTimes] = useState({});
-
-  // Record when the current question was displayed
   const displayStartTimeRef = useRef(new Date());
 
-  // Fetch quiz details and questions on mount (but do not start the attempt yet)
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        // 1. Fetch quiz details from the QuizDTO endpoint
         const quizResponse = await axios.get(`http://localhost:8080/quizzes/details/${quizId}`);
         let quizData = quizResponse.data;
 
-        // 2. If questions are not included, fetch them using stored questionIds
         if (!quizData.questions && quizData.questionIds) {
           let questionIds = [];
           try {
-            questionIds = JSON.parse(quizData.questionIds); // e.g., "[4,3]"
+            questionIds = JSON.parse(quizData.questionIds);
           } catch (parseError) {
             throw new Error("Error parsing question IDs.");
           }
@@ -50,18 +41,13 @@ function QuizAttempt() {
           }
         }
 
-        // 3. Validate that questions exist
         if (!quizData.questions || quizData.questions.length === 0) {
           throw new Error("No questions available for this quiz.");
         }
 
         setQuiz(quizData);
-        // Initialize the timer based on quiz time limit (in seconds)
         setTimeLeft(quizData.timeLimit);
-
-        // Initialize display start time for the first question
         displayStartTimeRef.current = new Date();
-
         setLoading(false);
       } catch (err) {
         console.error("Error fetching quiz:", err);
@@ -73,7 +59,6 @@ function QuizAttempt() {
     fetchQuiz();
   }, [quizId]);
 
-  // Timer effect: overall quiz countdown; auto-submit when time runs out
   useEffect(() => {
     if (timeLeft === null) return;
     if (timeLeft <= 0) {
@@ -86,40 +71,30 @@ function QuizAttempt() {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  // When the current question changes, record the time spent on the previous question
   useEffect(() => {
-    // If not the first question, calculate time for the previous question
     if (quiz && currentQuestionIndex > 0) {
       const previousQuestion = quiz.questions[currentQuestionIndex - 1];
       const previousQuestionId = previousQuestion.id;
       const now = new Date();
       const timeSpentSeconds = Math.floor((now - displayStartTimeRef.current) / 1000);
-      
+
       setQuestionTimes(prevTimes => ({
         ...prevTimes,
         [previousQuestionId]: (prevTimes[previousQuestionId] || 0) + timeSpentSeconds
       }));
 
-      // Reset the display start time for the new current question
       displayStartTimeRef.current = now;
     }
-    // For the first question, displayStartTimeRef is already set on mount.
   }, [currentQuestionIndex, quiz]);
 
-  // Handle answer selection per question
   const handleAnswerChange = (questionId, answer) => {
     setAnswers(prev => ({ ...prev, [questionId]: answer }));
   };
 
-  // Handle clicking the Hint button for the current question
   const handleHint = (questionId) => {
     setHintsUsed(prev => ({ ...prev, [questionId]: true }));
-    // Optionally, display the hint in the UI. For now, we simply alert it.
-    // const currentQ = quiz.questions.find(q => q.id === questionId);
-    // alert("Hint: " + (currentQ.hint || "No hint available."));
   };
 
-  // Navigation: Next and Previous question
   const handleNextQuestion = () => {
     if (currentQuestionIndex < quiz.questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
@@ -134,7 +109,6 @@ function QuizAttempt() {
 
   const handleSubmit = async () => {
     try {
-      // Before submission, update time for the current question as well
       const currentQuestion = quiz.questions[currentQuestionIndex];
       const currentQuestionId = currentQuestion.id;
       const now = new Date();
@@ -143,19 +117,17 @@ function QuizAttempt() {
         ...prev,
         [currentQuestionId]: (prev[currentQuestionId] || 0) + timeSpentSeconds
       }));
-  
-      // Prepare responses, including the time spent per question from state
+
       const responses = quiz.questions.map(question => {
         const qId = question.id;
         return {
           questionId: qId,
           studentResponse: answers[qId] || "",
           hintUsed: hintsUsed[qId] || false,
-          timeTaken: questionTimes[qId] || 0  // time in seconds for this question
+          timeTaken: questionTimes[qId] || 0
         };
       });
-  
-      // Start a new attempt if one hasn't been created already
+
       let currentAttemptId = attemptId;
       if (!currentAttemptId) {
         const userId = localStorage.getItem('userId');
@@ -168,22 +140,18 @@ function QuizAttempt() {
         currentAttemptId = attemptResponse.data.attemptId;
         setAttemptId(currentAttemptId);
       }
-  
+
       console.log('Submitting responses:', responses, 'for attemptId:', currentAttemptId);
-      // Submit the responses
       await axios.post(`http://localhost:8080/attempts/submit`, responses, {
         params: { attemptId: currentAttemptId }
       });
-      // Navigate to detailed view using attempt id
       navigate(`/quiz-attempt/view/${currentAttemptId}`);
     } catch (err) {
       console.error("Error submitting quiz:", err);
       setError("Error submitting quiz. Please try again.");
     }
   };
-  
 
-  // Loading state
   if (loading) {
     return (
       <div className="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center">
@@ -192,7 +160,6 @@ function QuizAttempt() {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div className="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center">
@@ -223,8 +190,20 @@ function QuizAttempt() {
         </div>
 
         <div className="bg-slate-800 p-6 rounded shadow mb-4">
-          <h2 className="text-2xl font-semibold mb-2">
-            Question {currentQuestionIndex + 1}: {currentQuestion.questionText || currentQuestion.content}
+          <h2 className="text-2xl font-semibold mb-2 flex items-center justify-between">
+            <span>
+              Question {currentQuestionIndex + 1}: {currentQuestion.questionText || currentQuestion.content}
+            </span>
+            {currentQuestion.difficulty && (
+              <span className={`
+                px-2 py-1 rounded text-sm font-semibold
+                ${currentQuestion.difficulty.toUpperCase() === 'EASY' ? 'bg-green-600/20 text-green-400' :
+                  currentQuestion.difficulty.toUpperCase() === 'MEDIUM' ? 'bg-yellow-600/20 text-yellow-400' :
+                  'bg-red-600/20 text-red-400'}
+              `}>
+                {currentQuestion.difficulty.toUpperCase()}
+              </span>
+            )}
           </h2>
           {currentQuestion.hint && (
             <div className="mb-4">
