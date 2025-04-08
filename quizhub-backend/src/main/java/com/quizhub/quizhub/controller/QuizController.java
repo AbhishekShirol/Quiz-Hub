@@ -126,16 +126,27 @@ public class QuizController {
 //    }
 
 //    getting the filterd quizes with the user id[]
+//    @GetMapping("/filtered/{userId}")
+//    public ResponseEntity<List<FilteredQuizDTO>> getFilteredQuizzesByUser(@PathVariable("userId") Long userId) {
+//        List<Quiz> quizzes = quizService.getFilteredQuizzesByUser(userId);
+//        List<FilteredQuizDTO> quizDTOs = quizzes.stream()
+//                .map(FilteredQuizDTO::new)
+//                .collect(Collectors.toList());
+//        return ResponseEntity.ok(quizDTOs);
+//    }
+
+//    getting the filterd quizes with the user id[]
     @GetMapping("/filtered/{userId}")
-    public ResponseEntity<List<FilteredQuizDTO>> getFilteredQuizzesByUser(@PathVariable("userId") Long userId) {
+    public ResponseEntity<List<BaseQuizDTO>> getFilteredQuizzesByUser(@PathVariable("userId") Long userId) {
         List<Quiz> quizzes = quizService.getFilteredQuizzesByUser(userId);
-        List<FilteredQuizDTO> quizDTOs = quizzes.stream()
-                .map(FilteredQuizDTO::new)
+        List<BaseQuizDTO> quizDTOs = quizzes.stream()
+                .map(QuizDTOFactory::createQuizDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(quizDTOs);
     }
 
-//  detailed quiz[]
+
+    //  detailed quiz[]
     @GetMapping("/details/{quizId}")
     public ResponseEntity<QuizDTO> getQuizDetails(@PathVariable("quizId") Long quizId) {
         Optional<QuizDTO> quizOpt = quizService.getQuizDTOById(quizId);
@@ -144,41 +155,86 @@ public class QuizController {
     }
 
 //    these are for listing in the educators dashboard[]
+//    @GetMapping("/public/{userId}")
+//    public ResponseEntity<List<PublicQuizDTO>> getPublicQuizzesByUser(@PathVariable Long userId) {
+//        List<Quiz> quizzes = quizService.getQuizzesByUserAndVisibility(userId, QuizVisibility.PUBLIC);
+//        List<PublicQuizDTO> quizDTOs = quizzes.stream().map(PublicQuizDTO::new).collect(Collectors.toList());
+//        return ResponseEntity.ok(quizDTOs);
+//    }
+//
+//    //    these are for listing in the educators dashboard[]
+//    @GetMapping("/private/{userId}")
+//    public ResponseEntity<List<PrivateQuizDTO>> getPrivateQuizzesByUser(@PathVariable Long userId) {
+//        List<Quiz> quizzes = quizService.getQuizzesByUserAndVisibility(userId, QuizVisibility.PRIVATE);
+//        List<PrivateQuizDTO> quizDTOs = quizzes.stream().map(PrivateQuizDTO::new).collect(Collectors.toList());
+//        return ResponseEntity.ok(quizDTOs);
+//    }
+
+    // For educator's public quizzes[]
     @GetMapping("/public/{userId}")
-    public ResponseEntity<List<PublicQuizDTO>> getPublicQuizzesByUser(@PathVariable Long userId) {
+    public ResponseEntity<List<BaseQuizDTO>> getPublicQuizzesByUser(@PathVariable Long userId) {
         List<Quiz> quizzes = quizService.getQuizzesByUserAndVisibility(userId, QuizVisibility.PUBLIC);
-        List<PublicQuizDTO> quizDTOs = quizzes.stream().map(PublicQuizDTO::new).collect(Collectors.toList());
+        List<BaseQuizDTO> quizDTOs = quizzes.stream()
+                .map(QuizDTOFactory::createQuizDTO)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(quizDTOs);
     }
 
-    //    these are for listing in the educators dashboard[]
+    // For educator's private quizzes[]
     @GetMapping("/private/{userId}")
-    public ResponseEntity<List<PrivateQuizDTO>> getPrivateQuizzesByUser(@PathVariable Long userId) {
+    public ResponseEntity<List<BaseQuizDTO>> getPrivateQuizzesByUser(@PathVariable Long userId) {
         List<Quiz> quizzes = quizService.getQuizzesByUserAndVisibility(userId, QuizVisibility.PRIVATE);
-        List<PrivateQuizDTO> quizDTOs = quizzes.stream().map(PrivateQuizDTO::new).collect(Collectors.toList());
-        return ResponseEntity.ok(quizDTOs);
-    }
-
-//  getting the public quiz for students[]
-    @GetMapping("/public")
-    public ResponseEntity<List<PublicQuizDTO>> getAllPublicQuizzes() {
-        List<Quiz> quizzes = quizService.getQuizzesByVisibility(QuizVisibility.PUBLIC);
-        List<PublicQuizDTO> quizDTOs = quizzes.stream()
-                .map(PublicQuizDTO::new)
+        List<BaseQuizDTO> quizDTOs = quizzes.stream()
+                .map(QuizDTOFactory::createQuizDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(quizDTOs);
     }
 
 
-//    getting the private quiz by quiz code[]
+//  getting the public quiz for students[]
+//    @GetMapping("/public")
+//    public ResponseEntity<List<PublicQuizDTO>> getAllPublicQuizzes() {
+//        List<Quiz> quizzes = quizService.getQuizzesByVisibility(QuizVisibility.PUBLIC);
+//        List<PublicQuizDTO> quizDTOs = quizzes.stream()
+//                .map(PublicQuizDTO::new)
+//                .collect(Collectors.toList());
+//        return ResponseEntity.ok(quizDTOs);
+//    }
+
+    @GetMapping("/public")
+    public ResponseEntity<List<BaseQuizDTO>> getAllPublicQuizzes() {
+        List<Quiz> quizzes = quizService.getQuizzesByVisibility(QuizVisibility.PUBLIC);
+        List<BaseQuizDTO> quizDTOs = quizzes.stream()
+                .map(QuizDTOFactory::createQuizDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(quizDTOs);
+    }
+
+
+
+    //    getting the private quiz by quiz code[]
+//    @GetMapping("/private")
+//    public ResponseEntity<PrivateQuizDTO> getPrivateQuizByCode(@RequestParam("code") String code) {
+//        Optional<Quiz> quizOpt = quizRepository.findByPrivateCode(code);
+//        if (quizOpt.isPresent() && quizOpt.get().getVisibility() == QuizVisibility.PRIVATE) {
+//            return ResponseEntity.ok(new PrivateQuizDTO(quizOpt.get()));
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//    }
+
+    //    getting the private quiz by quiz code[]
     @GetMapping("/private")
-    public ResponseEntity<PrivateQuizDTO> getPrivateQuizByCode(@RequestParam("code") String code) {
+    public ResponseEntity<BaseQuizDTO> getPrivateQuizByCode(@RequestParam("code") String code) {
         Optional<Quiz> quizOpt = quizRepository.findByPrivateCode(code);
+
         if (quizOpt.isPresent() && quizOpt.get().getVisibility() == QuizVisibility.PRIVATE) {
-            return ResponseEntity.ok(new PrivateQuizDTO(quizOpt.get()));
+            BaseQuizDTO dto = QuizDTOFactory.createQuizDTO(quizOpt.get());
+            return ResponseEntity.ok(dto);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
 
 }
