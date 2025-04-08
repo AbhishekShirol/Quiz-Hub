@@ -11,33 +11,67 @@ Built with:
 
 ## 🚀 Major Features
 
-### 👥 Role-Based User Management
-- **Admin**: Manage all users.
-- **Educator**: Create quizzes(Private and Public), view student analytics(quiz attempt history), add and manage questions.
-- **Student**: Attempt quizzes, track performance, generate filtered quizzes.
+### 👥 Role-Based User Management with Auth
+- **Admin**: 
+  - Manage all users
+  - Create new admin accounts
+- **Educator**: 
+  - Create quizzes (Private and Public)
+  - View student analytics (quiz attempt history)
+  - Add and manage questions with various difficulty levels
+  - Set visibility and access options for quizzes as Public and Private
+- **Student**: 
+  - Attempt quizzes using direct access or quiz codes
+  - Track performance and review past attempts
+  - Generate filtered quizzes based on preferences
+---
 
 ### 📝 Quiz Creation
 - Educators can create:
-  - **MCQs**
-  - **True/False Questions**
+  - **MCQs** with multiple options and one correct answer
+  - **True/False Questions** with binary response options
 - Create **Public** and **Private Quizzes**:
-  - Private quizzes require a **quiz code** to join.
-  - Public quizzes are accessible to all users.
-- Add **Hints** to questions (using them reduces score).
-- Set **total time limit for Quiz**.
+  - Private quizzes require a **quiz code** to join
+  - Public quizzes are accessible to all users in the question pool
+- Add **Hints** to questions (using them reduces score)
+- Configure quiz settings:
+  - Set **total time limit for Quiz**
+  - Customize quiz title and description
+  - Define difficulty level for the entire quiz
+---
 
 ### 🎯 Filtered Quiz System
 - Students can generate **custom quizzes** by selecting:
-  - **Topic**
-  - **Difficulty Level**
-  - **Number of Questions**
-  - **Time Per Question**
-- Based on the selected filters, the system randomly pulls questions from the **public question pool**.
+  - **Topic** of interest
+  - **Difficulty Level** appropriate to their knowledge
+  - **Number of Questions** to include
+  - **Time for Quiz** completion
+- System workflow:
+  - Based on the selected filters, the system searches the question database
+  - If enough questions are available, creates the filtered quiz
+  - If question shortage occurs, notifies student to adjust criteria
+  - Allows students to save generated quizzes for later or start immediately
+---
 
-### 📈 Analytics Dashboard
-- Educators can view detailed analytics of:
-  - Quiz attempts
-  - Detailed quiz attempt history by the Student
+### 📊 Quiz Attempt Process
+- **Starting a Quiz**:
+  - Students can find quizzes through browsing or enter a quiz code
+  - Quiz timer begins once the attempt is initiated
+  - Questions are presented sequentially to the student
+
+- **During the Quiz**:
+  - Students read questions and consider answers
+  - Option to use hints with score reduction penalty
+  - Submit answers which are automatically saved
+  - Progress through all questions until completion
+
+- **Quiz Completion**:
+  - Quiz ends when all questions are answered or timer expires
+  - Automatic submission occurs if time limit is reached
+  - System calculates final score based on correct answers and hint usage
+  - Students can review results including correct answers
+  - Performance data is stored for future progress tracking
+
 
 ---
 
@@ -46,22 +80,28 @@ Built with:
 ### 🧠 Hint System
 - Each question can include a hint.
 - Students can use hints at the cost of reduced points.
-
-### ⏲️ Timer Functionality
-- Total quiz time can be enforced.
-- Time taken on that Question
-
-### 🔍 Search Functionality for PrivateQuizzes
-- Users can search quizzes by:
-  - **The private Code Provided By the Educator**
+---
 
 ### 🗃️ Question Bank Management
 - Educators manage a question bank with:
   - Question & Options
-  - Question type
+  - Question type(MCQ & True or False)
   - Topic
   - Difficulty
   - Hints
+---
+
+### ⏲️ Timer Functionality
+- Total quiz time can be enforced.
+- Time taken on that Question
+---
+### 🔍 Search Functionality for PrivateQuizzes
+- Users can search quizzes by:
+  - **The private Code Provided By the Educator**
+---
+### 📈 Analytics Dashboard
+- Educators can view detailed analytics of:
+  - Quiz attempts for the quizzes
 ---
 
 ## 🛠 Tech Stack

@@ -102,6 +102,4 @@ public class QuizAttemptController {
         List<QuizAttemptWithStudentDTO> attemptsDto = quizAttemptService.getAttemptsByQuizWithStudentName(quizId);
         return ResponseEntity.ok(attemptsDto);
     }
-
-
 }
