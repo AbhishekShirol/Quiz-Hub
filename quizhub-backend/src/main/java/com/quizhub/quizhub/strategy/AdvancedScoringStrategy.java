@@ -1,6 +1,7 @@
 package com.quizhub.quizhub.strategy;
 
 import com.quizhub.quizhub.model.DifficultyLevel;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
  * This demonstrates the extensibility of the Strategy pattern.
  */
 @Component("advancedScoringStrategy")
+@Primary
 public class AdvancedScoringStrategy implements ScoringStrategy {
 
     /**
