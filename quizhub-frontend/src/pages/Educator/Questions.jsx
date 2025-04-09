@@ -194,7 +194,7 @@ function Question() {
         {/* Dashboard Table */}
         {!selectedQuestion && (
           <>
-            <h2 className="text-3xl font-bold mb-4">Educator Dashboard</h2>
+            <h2 className="text-3xl font-bold mb-4">My Questions</h2>
             <div className="overflow-x-auto">
               <table className="min-w-full bg-slate-800 border border-slate-700">
                 <thead>
